@@ -32,6 +32,7 @@ vcpkg_installed/
 !build/darknet/YoloWrapper.cs
 .fuse*
 *.weights
+build/
 build/*.cmake
 build/*.ninja
 build/*.txt
@@ -70,3 +71,5 @@ uselib_track
 darknet
 kmeansiou
 vcpkg/
+compile_commands.json
+.cache/

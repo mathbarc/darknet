@@ -12,7 +12,7 @@ void forward_implicit_layer(const layer l, network_state state);
 void backward_implicit_layer(const layer l, network_state state);
 void update_implicit_layer(layer l, int batch, float learning_rate_init, float momentum, float decay);
 
-void resize_implicit_layer(layer *l, int w, int h);
+void resize_implicit_layer(layer* l, int w, int h);
 
 #ifdef GPU
 void forward_implicit_layer_gpu(const layer l, network_state state);
@@ -26,4 +26,4 @@ void push_implicit_layer(layer l);
 #ifdef __cplusplus
 }
 #endif
-#endif  // REPRESENTATION_LAYER_H
+#endif // REPRESENTATION_LAYER_H

@@ -75,12 +75,12 @@ extern "C" {
 
 #define REPLACE_GETOPT /* use this getopt as the system getopt(3) */
 
-//extern int optind;        /* index of first non-option in argv      */
-//extern int optopt;        /* single option character, as parsed     */
-//extern int opterr;        /* flag to enable built-in diagnostics... */
-//                /* (user may set to zero, to suppress)    */
+// extern int optind;        /* index of first non-option in argv      */
+// extern int optopt;        /* single option character, as parsed     */
+// extern int opterr;        /* flag to enable built-in diagnostics... */
+//                 /* (user may set to zero, to suppress)    */
 //
-//extern char *optarg;        /* pointer to argument of current option  */
+// extern char *optarg;        /* pointer to argument of current option  */
 
 #define PRINT_ERROR ((opterr) && (*options != ':'))
 
@@ -105,10 +105,8 @@ static char EMSG[] = "";
 #define EMSG ""
 #endif
 
-static int getopt_internal(int, char* const*, const char*,
-    const struct option*, int*, int);
-static int parse_long_options(char* const*, const char*,
-    const struct option*, int*, int);
+static int getopt_internal(int, char* const*, const char*, const struct option*, int*, int);
+static int parse_long_options(char* const*, const char*, const struct option*, int*, int);
 static int gcd(int, int);
 static void permute_args(int, int, int, char* const*);
 
@@ -152,7 +150,7 @@ static void permute_args(int panonopt_start, int panonopt_end, int opt_end, char
 int getopt(int nargc, char* const* nargv, const char* options);
 #endif /* REPLACE_GETOPT */
 
-//extern int getopt(int nargc, char * const *nargv, const char *options);
+// extern int getopt(int nargc, char * const *nargv, const char *options);
 
 #ifdef _BSD_SOURCE
 /*

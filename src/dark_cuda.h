@@ -6,7 +6,6 @@
 extern "C" {
 #endif
 
-
 extern int cuda_debug_sync;
 extern int gpu_index;
 #ifdef __cplusplus
@@ -20,11 +19,11 @@ extern int gpu_index;
 #define WARP_SIZE 32
 #define BLOCK_TRANSPOSE32 256
 
+#include <cublas_v2.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <curand.h>
-#include <cublas_v2.h>
 #include <cuda_runtime_api.h>
+#include <curand.h>
 
 #ifdef CUDA_OPENGL_INTEGRATION
 // On Windows, we need to include <windows.h> before
@@ -66,45 +65,47 @@ extern int gpu_index;
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
-    void check_error(cudaError_t status, const char * const filename, const char * const funcname, const int line);
-    void check_error_extended(cudaError_t status, const char * const filename, const char * const funcname, const int line);
-    void cublas_check_error_extended(cublasStatus_t status, const char * const filename, const char * const funcname, const int line);
-#define CHECK_CUDA(X) check_error_extended(X, __FILE__, __func__, __LINE__ );
-#define CHECK_CUBLAS(X) cublas_check_error_extended(X, __FILE__, __func__, __LINE__ );
+void check_error(cudaError_t status, const char* const filename, const char* const funcname, const int line);
+void check_error_extended(cudaError_t status, const char* const filename, const char* const funcname, const int line);
+void cublas_check_error_extended(cublasStatus_t status, const char* const filename, const char* const funcname, const int line);
+#define CHECK_CUDA(X) check_error_extended(X, __FILE__, __func__, __LINE__);
+#define CHECK_CUBLAS(X) cublas_check_error_extended(X, __FILE__, __func__, __LINE__);
 
-    cublasHandle_t blas_handle();
-    void free_pinned_memory();
-    void pre_allocate_pinned_memory(size_t size);
-    float *cuda_make_array_pinned_preallocated(float *x, size_t n);
-    float *cuda_make_array_pinned(float *x, size_t n);
-    float *cuda_make_array(float *x, size_t n);
-    void **cuda_make_array_pointers(void **x, size_t n);
-    int *cuda_make_int_array(size_t n);
-    int *cuda_make_int_array_new_api(int *x, size_t n);
-    void cuda_push_array(float *x_gpu, float *x, size_t n);
-    //LIB_API void cuda_pull_array(float *x_gpu, float *x, size_t n);
-    //LIB_API void cuda_set_device(int n);
-    int cuda_get_device();
-    void cuda_free_host(float *x_cpu);
-    void cuda_free(float *x_gpu);
-    void cuda_random(float *x_gpu, size_t n);
-    float cuda_compare(float *x_gpu, float *x, size_t n, char *s);
-    dim3 cuda_gridsize(size_t n);
-    cudaStream_t get_cuda_stream();
-    //cudaStream_t get_cuda_memcpy_stream();
-    int get_number_of_blocks(int array_size, int block_size);
-    int get_gpu_compute_capability(int i, char *device_name);
-    void show_cuda_cudnn_info();
+cublasHandle_t blas_handle();
+void free_pinned_memory();
+void pre_allocate_pinned_memory(size_t size);
+float* cuda_make_array_pinned_preallocated(float* x, size_t n);
+float* cuda_make_array_pinned(float* x, size_t n);
+float* cuda_make_array(float* x, size_t n);
+void** cuda_make_array_pointers(void** x, size_t n);
+int* cuda_make_int_array(size_t n);
+int* cuda_make_int_array_new_api(int* x, size_t n);
+void cuda_push_array(float* x_gpu, float* x, size_t n);
+// LIB_API void cuda_pull_array(float *x_gpu, float *x, size_t n);
+// LIB_API void cuda_set_device(int n);
+int cuda_get_device();
+void cuda_free_host(float* x_cpu);
+void cuda_free(float* x_gpu);
+void cuda_random(float* x_gpu, size_t n);
+float cuda_compare(float* x_gpu, float* x, size_t n, char* s);
+dim3 cuda_gridsize(size_t n);
+cudaStream_t get_cuda_stream();
+// cudaStream_t get_cuda_memcpy_stream();
+int get_number_of_blocks(int array_size, int block_size);
+int get_gpu_compute_capability(int i, char* device_name);
+void show_cuda_cudnn_info();
 
-    cudaStream_t switch_stream(int i);
-    void wait_stream(int i);
-    void reset_wait_stream_events();
+cudaStream_t switch_stream(int i);
+void wait_stream(int i);
+void reset_wait_stream_events();
 
 #ifdef CUDNN
 cudnnHandle_t cudnn_handle();
-enum {cudnn_fastest, cudnn_smallest, cudnn_specify};
+enum { cudnn_fastest,
+       cudnn_smallest,
+       cudnn_specify };
 
-void cudnn_check_error_extended(cudnnStatus_t status, const char * const filename, const char * const function, const int line);
+void cudnn_check_error_extended(cudnnStatus_t status, const char* const filename, const char* const function, const int line);
 #define CHECK_CUDNN(X) cudnn_check_error_extended(X, __FILE__, __func__, __LINE__);
 #endif
 
@@ -113,6 +114,6 @@ void cudnn_check_error_extended(cudnnStatus_t status, const char * const filenam
 #endif // __cplusplus
 
 #else // GPU
-//LIB_API void cuda_set_device(int n);
+// LIB_API void cuda_set_device(int n);
 #endif // GPU
 #endif // DARKCUDA_H

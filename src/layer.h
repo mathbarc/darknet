@@ -8,56 +8,56 @@
 extern "C" {
 #endif
 
-//struct network_state;
+// struct network_state;
 
-//struct layer;
-//typedef struct layer layer;
+// struct layer;
+// typedef struct layer layer;
 
-//typedef enum {
-//    CONVOLUTIONAL,
-//    DECONVOLUTIONAL,
-//    CONNECTED,
-//    MAXPOOL,
-//    SOFTMAX,
-//    DETECTION,
-//    DROPOUT,
-//    CROP,
-//    ROUTE,
-//    COST,
-//    NORMALIZATION,
-//    AVGPOOL,
-//    LOCAL,
-//    SHORTCUT,
-//    ACTIVE,
-//    RNN,
-//    GRU,
-//    CRNN,
-//    BATCHNORM,
-//    NETWORK,
-//    XNOR,
-//    REGION,
-//    YOLO,
-//    REORG,
-//    UPSAMPLE,
-//    REORG_OLD,
-//    BLANK
-//} LAYER_TYPE;
+// typedef enum {
+//     CONVOLUTIONAL,
+//     DECONVOLUTIONAL,
+//     CONNECTED,
+//     MAXPOOL,
+//     SOFTMAX,
+//     DETECTION,
+//     DROPOUT,
+//     CROP,
+//     ROUTE,
+//     COST,
+//     NORMALIZATION,
+//     AVGPOOL,
+//     LOCAL,
+//     SHORTCUT,
+//     ACTIVE,
+//     RNN,
+//     GRU,
+//     CRNN,
+//     BATCHNORM,
+//     NETWORK,
+//     XNOR,
+//     REGION,
+//     YOLO,
+//     REORG,
+//     UPSAMPLE,
+//     REORG_OLD,
+//     BLANK
+// } LAYER_TYPE;
 
-//typedef enum{
-//    SSE, MASKED, SMOOTH
-//} COST_TYPE;
+// typedef enum{
+//     SSE, MASKED, SMOOTH
+// } COST_TYPE;
 
-//typedef struct {
-//    int batch;
-//    float learning_rate;
-//    float momentum;
-//    float decay;
-//    int adam;
-//    float B1;
-//    float B2;
-//    float eps;
-//    int t;
-//} update_args;
+// typedef struct {
+//     int batch;
+//     float learning_rate;
+//     float momentum;
+//     float decay;
+//     int adam;
+//     float B1;
+//     float B2;
+//     float eps;
+//     int t;
+// } update_args;
 
 /*
 struct layer{
@@ -330,7 +330,7 @@ struct layer{
 #endif  // GPU
 };
 */
-//void free_layer(layer);
+// void free_layer(layer);
 
 #ifdef __cplusplus
 }

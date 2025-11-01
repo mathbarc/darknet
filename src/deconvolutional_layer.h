@@ -1,9 +1,9 @@
 #ifndef DECONVOLUTIONAL_LAYER_H
 #define DECONVOLUTIONAL_LAYER_H
 
+#include "activations.h"
 #include "dark_cuda.h"
 #include "image.h"
-#include "activations.h"
 #include "layer.h"
 #include "network.h"
 
@@ -21,7 +21,7 @@ void pull_deconvolutional_layer(deconvolutional_layer layer);
 #endif
 
 deconvolutional_layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, ACTIVATION activation);
-void resize_deconvolutional_layer(deconvolutional_layer *layer, int h, int w);
+void resize_deconvolutional_layer(deconvolutional_layer* layer, int h, int w);
 void forward_deconvolutional_layer(const deconvolutional_layer layer, network_state state);
 void update_deconvolutional_layer(deconvolutional_layer layer, int skip, float learning_rate, float momentum, float decay);
 void backward_deconvolutional_layer(deconvolutional_layer layer, network_state state);

@@ -1,13 +1,13 @@
 #include "sam_layer.h"
-#include "utils.h"
-#include "dark_cuda.h"
 #include "blas.h"
-#include <stdio.h>
+#include "dark_cuda.h"
+#include "utils.h"
 #include <assert.h>
+#include <stdio.h>
 
 layer make_sam_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2)
 {
-    fprintf(stderr,"scale Layer: %d\n", index);
+    fprintf(stderr, "scale Layer: %d\n", index);
     layer l = { (LAYER_TYPE)0 };
     l.type = SAM;
     l.batch = batch;
@@ -21,7 +21,7 @@ layer make_sam_layer(int batch, int index, int w, int h, int c, int w2, int h2, 
     assert(l.out_c == l.c);
     assert(l.w == l.out_w && l.h == l.out_h);
 
-    l.outputs = l.out_w*l.out_h*l.out_c;
+    l.outputs = l.out_w * l.out_h * l.out_c;
     l.inputs = l.outputs;
     l.index = index;
 
@@ -34,17 +34,17 @@ layer make_sam_layer(int batch, int index, int w, int h, int c, int w2, int h2, 
     l.forward_gpu = forward_sam_layer_gpu;
     l.backward_gpu = backward_sam_layer_gpu;
 
-    l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
-    l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
+    l.delta_gpu = cuda_make_array(l.delta, l.outputs * batch);
+    l.output_gpu = cuda_make_array(l.output, l.outputs * batch);
 #endif
     return l;
 }
 
-void resize_sam_layer(layer *l, int w, int h)
+void resize_sam_layer(layer* l, int w, int h)
 {
     l->out_w = w;
     l->out_h = h;
-    l->outputs = l->out_w*l->out_h*l->out_c;
+    l->outputs = l->out_w * l->out_h * l->out_c;
     l->inputs = l->outputs;
     l->delta = (float*)xrealloc(l->delta, l->outputs * l->batch * sizeof(float));
     l->output = (float*)xrealloc(l->output, l->outputs * l->batch * sizeof(float));
@@ -52,40 +52,39 @@ void resize_sam_layer(layer *l, int w, int h)
 #ifdef GPU
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
-    l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
-    l->delta_gpu = cuda_make_array(l->delta, l->outputs*l->batch);
+    l->output_gpu = cuda_make_array(l->output, l->outputs * l->batch);
+    l->delta_gpu = cuda_make_array(l->delta, l->outputs * l->batch);
 #endif
-
 }
 
 void forward_sam_layer(const layer l, network_state state)
 {
     int size = l.batch * l.out_c * l.out_w * l.out_h;
-    //int channel_size = 1;
-    float *from_output = state.net.layers[l.index].output;
+    // int channel_size = 1;
+    float* from_output = state.net.layers[l.index].output;
 
     int i;
-    #pragma omp parallel for
+#pragma omp parallel for
     for (i = 0; i < size; ++i) {
         l.output[i] = state.input[i] * from_output[i];
     }
 
-    activate_array(l.output, l.outputs*l.batch, l.activation);
+    activate_array(l.output, l.outputs * l.batch, l.activation);
 }
 
 void backward_sam_layer(const layer l, network_state state)
 {
-    gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
-    //axpy_cpu(l.outputs*l.batch, 1, l.delta, 1, state.delta, 1);
-    //scale_cpu(l.batch, l.out_w, l.out_h, l.out_c, l.delta, l.w, l.h, l.c, state.net.layers[l.index].delta);
+    gradient_array(l.output, l.outputs * l.batch, l.activation, l.delta);
+    // axpy_cpu(l.outputs*l.batch, 1, l.delta, 1, state.delta, 1);
+    // scale_cpu(l.batch, l.out_w, l.out_h, l.out_c, l.delta, l.w, l.h, l.c, state.net.layers[l.index].delta);
 
     int size = l.batch * l.out_c * l.out_w * l.out_h;
-    //int channel_size = 1;
-    float *from_output = state.net.layers[l.index].output;
-    float *from_delta = state.net.layers[l.index].delta;
+    // int channel_size = 1;
+    float* from_output = state.net.layers[l.index].output;
+    float* from_delta = state.net.layers[l.index].delta;
 
     int i;
-    #pragma omp parallel for
+#pragma omp parallel for
     for (i = 0; i < size; ++i) {
         state.delta[i] += l.delta[i] * from_output[i]; // l.delta * from  (should be divided by channel_size?)
 
@@ -101,18 +100,17 @@ void forward_sam_layer_gpu(const layer l, network_state state)
 
     sam_gpu(state.net.layers[l.index].output_gpu, size, channel_size, state.input, l.output_gpu);
 
-    activate_array_ongpu(l.output_gpu, l.outputs*l.batch, l.activation);
+    activate_array_ongpu(l.output_gpu, l.outputs * l.batch, l.activation);
 }
 
 void backward_sam_layer_gpu(const layer l, network_state state)
 {
-    gradient_array_ongpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
+    gradient_array_ongpu(l.output_gpu, l.outputs * l.batch, l.activation, l.delta_gpu);
 
     int size = l.batch * l.out_c * l.out_w * l.out_h;
     int channel_size = 1;
-    float *from_output = state.net.layers[l.index].output_gpu;
-    float *from_delta = state.net.layers[l.index].delta_gpu;
-
+    float* from_output = state.net.layers[l.index].output_gpu;
+    float* from_delta = state.net.layers[l.index].delta_gpu;
 
     backward_sam_gpu(l.delta_gpu, size, channel_size, state.input, from_delta, from_output, state.delta);
 }

@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 layer make_conv_lstm_layer(int batch, int h, int w, int c, int output_filters, int groups, int steps, int size, int stride, int dilation, int pad, ACTIVATION activation, int batch_normalize, int peephole, int xnor, int bottleneck, int train);
-void resize_conv_lstm_layer(layer *l, int w, int h);
+void resize_conv_lstm_layer(layer* l, int w, int h);
 void free_state_conv_lstm(layer l);
 void randomize_state_conv_lstm(layer l);
 void remember_state_conv_lstm(layer l);
@@ -37,4 +37,4 @@ void backward_history_layer_gpu(const layer l, network_state state);
 }
 #endif
 
-#endif  // CONV_LSTM_LAYER_H
+#endif // CONV_LSTM_LAYER_H
